@@ -1,0 +1,48 @@
+version: '3'
+services:
+  mysql:
+    container_name: mysql8.0
+    image: "mysql/mysql-server:8.0.23"
+    ports:
+      - "3406:3306"
+    environment:
+      TZ: Asia/Shanghai
+      MYSQL_ROOT_PASSWORD: "zhaolu123"
+    restart: always
+    volumes:
+      - /Users/zhaolu/Desktop/docker/mysqli/:/var/lib/mysql
+    networks:
+      - lnmp
+#    build:
+#      context: ./mysql.sh
+#      dockerfile: dockerfile
+  nginx:
+    container_name: nginx
+    image: "nginx"
+    ports:
+      - "2333:80"
+    volumes:
+      - /Users/zhaolu/Desktop/docker/www:/var/www
+      - /Users/zhaolu/Desktop/docker/default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - lnmp
+    restart: always
+  php:
+    build:
+      context: ./php.sh
+      dockerfile: dockerfile
+    container_name: php8.0
+    image: "php:8.0.2-fpm"
+    networks:
+      - lnmp
+    volumes:
+      - /Users/zhaolu/Desktop/docker/www:/var/www
+      - /Users/zhaolu/Desktop/docker/conf.d:/usr/local/etc/php/conf.d
+      - /Users/zhaolu/Desktop/docker/mysqli/:/var/lib/mysql/
+    restart: always
+networks:
+  lnmp:
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.54.0.0/24"
