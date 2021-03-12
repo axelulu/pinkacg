@@ -8,7 +8,7 @@
 
 演示图片：
 
-![截屏2021-03-12 下午8.07.35](https://github.com/poem-code/pinkacg/blob/master/img/截屏2021-03-12 下午8.07.35.png)
+![截屏2021-03-12 下午8.07.35](https://fontawesome.catacg.cn/post_img/1/2020/07/1-476d89a143c644d4be953da3ece86635.png)
 
 ![截屏2021-03-12 下午8.07.57](https://github.com/poem-code/pinkacg/blob/master/img/截屏2021-03-12 下午8.07.57.png)
 
