@@ -42,7 +42,7 @@ $download_urls = $PostMeta['post_download_link'] ? unserialize($PostMeta['post_d
             </legend>
             <div class="ghost_setting_content_item_content">
                 <div class="ghost_setting_content_preface_item_content">
-                    <a class="ghost_setting_content_btn routine_post <?php echo PostMeta::GetPostType($PostMeta['post_type']);?>">
+                    <a class="ghost_setting_content_btn routine_post <?php echo PostMeta::GetPostType($PostMeta['post_type'],'post');?>">
                         <span class="poi-icon fa-check fas fa-fw" aria-hidden="true"></span>
                         <span class="ghost_setting_content_text">常规</span></a>
                     <a class="ghost_setting_content_btn video_post <?php echo PostMeta::GetPostType($PostMeta['post_type'],'video');?>">
@@ -69,6 +69,8 @@ $download_urls = $PostMeta['post_download_link'] ? unserialize($PostMeta['post_d
                     </span>
                 </legend>
                 <div class="ghost_setting_content_item_content ghost_video">
+                    <?php $i = 0;
+                    foreach ($video_urls as $video_url){?>
                     <div class="clearfix ghost_video_link">
                         <div class="col-lg-4 float-left poi-g_lg-2-10">
                             <label class="ghost_video_link_group_inputs">
@@ -77,8 +79,8 @@ $download_urls = $PostMeta['post_download_link'] ? unserialize($PostMeta['post_d
                                     </span>
                                 </span>
                                 <span class="ghost_video_link_inputs_content">
-                                    <input name="post_video_container[0][name]" class="ghost_setting_content_preface_control_videolink "
-                                    type="text" placeholder="视频名称" title="视频名称" list="customPostStoragedatalist">
+                                    <input name="post_video_container[<?php echo $i;?>][name]" class="ghost_setting_content_preface_control_videolink "
+                                    type="text" placeholder="视频名称" title="视频名称" value="<?php echo $video_url->name;?>" list="customPostStoragedatalist">
                                 </span>
                             </label>
                         </div>
@@ -89,8 +91,8 @@ $download_urls = $PostMeta['post_download_link'] ? unserialize($PostMeta['post_d
                                     </span>
                                 </span>
                                 <span class="ghost_video_link_inputs_content">
-                                    <input name="post_video_container[0][link]" class="ghost_setting_content_preface_control_videolink "
-                                    type="text" placeholder="视频地址" title="视频地址" list="customPostStoragedatalist">
+                                    <input name="post_video_container[<?php echo $i;?>][link]" class="ghost_setting_content_preface_control_videolink "
+                                    type="text" placeholder="视频地址" title="视频地址" value="<?php echo $video_url->link;?>" list="customPostStoragedatalist">
                                 </span>
                             </label>
                         </div>
@@ -100,7 +102,7 @@ $download_urls = $PostMeta['post_download_link'] ? unserialize($PostMeta['post_d
                                     <span class="poi-icon fa-plus fas fa-fw" aria-hidden="true">
                                     </span>
                                 </a>
-                                <a style="background: rgba(241,108,102,.3);color:#fff;cursor: not-allowed;"
+                                <a
                                 class="ghost_video_link_delete_btn" disabled="">
                                     <span class="poi-icon fa-trash fas fa-fw" aria-hidden="true">
                                     </span>
@@ -108,6 +110,9 @@ $download_urls = $PostMeta['post_download_link'] ? unserialize($PostMeta['post_d
                             </div>
                         </div>
                     </div>
+                    <?php
+                    $i++;
+                    }?>
                 </div>
             </fieldset>
         </div>
@@ -194,12 +199,14 @@ $download_urls = $PostMeta['post_download_link'] ? unserialize($PostMeta['post_d
             </legend>
             <div class="ghost_setting_content_item_content">
                 <div class="ghost_post_tag_inputs">
+                    <?php foreach (json_decode($PostMeta['post_tag']) as $post_tag){?>
                     <div class="poi-btn-group ghost_post_tag_inputs_container">
-                        <input type="text" class="ghost_setting_content_preface_control ghost_post_tag_input" name="tags[]" placeholder="帖子标签" value="">
-                        <a style="background: rgba(241,108,102,.3);color:#fff;cursor: not-allowed;" class="poi-btn poi-btn_default ghost_post_tag_input_btn" disabled="">
+                        <input type="text" class="ghost_setting_content_preface_control ghost_post_tag_input" name="tags[]" placeholder="帖子标签" value="<?php echo $post_tag;?>">
+                        <a class="poi-btn poi-btn_default ghost_post_tag_input_btn" disabled="">
                             <span class="poi-icon fa-trash fas fa-fw" aria-hidden="true"></span>
                         </a>
                     </div>
+                    <?php } ?>
                 </div>
                 <a class="add_posttag ghost_setting_content_btn_success">
                     <span class="poi-icon fa-plus fas fa-fw" aria-hidden="true"></span>
@@ -213,7 +220,8 @@ $download_urls = $PostMeta['post_download_link'] ? unserialize($PostMeta['post_d
                     <span class="ghost_setting_content_text">下载链接</span></span>
             </legend>
             <div class="ghost_setting_content_item_content ghost_download">
-            <?php foreach($download_urls as $download_url){?>
+            <?php if (!empty($download_urls)){
+                foreach($download_urls as $download_url){?>
                 <div class="clearfix ghost_download_link">
                     <div class="col-lg-2 float-left poi-g_lg-2-10">
                         <label class="ghost_download_link_group_inputs">
@@ -265,13 +273,72 @@ $download_urls = $PostMeta['post_download_link'] ? unserialize($PostMeta['post_d
                             <a class="link_add ghost_download_link_delete_btn">
                                 <span class="poi-icon fa-plus fas fa-fw" aria-hidden="true"></span>
                             </a>
-                            <a style="background: rgba(241,108,102,.3);color:#fff;cursor: not-allowed;" class="ghost_download_link_delete_btn" disabled="">
+                            <a class="ghost_download_link_delete_btn" disabled="">
                                 <span class="poi-icon fa-trash fas fa-fw" aria-hidden="true"></span>
                             </a>
                         </div>
                     </div>
                 </div>
-                <?php }?>
+                <?php }
+                }else{ ?>
+                <div class="clearfix ghost_download_link">
+                    <div class="col-lg-2 float-left poi-g_lg-2-10">
+                        <label class="ghost_download_link_group_inputs">
+                            <span class="ghost_download_link_inputs_icon">
+                                <span class="poi-icon fa-cloud-download-alt fas fa-fw" aria-hidden="true"></span>
+                            </span>
+                            <span class="ghost_download_link_inputs_content">
+                                <input name="post_download_container[0][name]" class="ghost_setting_content_preface_control_downloadlink " type="text" placeholder="下载名称" title="下载名称" list="customPostStoragedatalist"></span>
+                        </label>
+                    </div>
+                    <div class="col-lg-3 float-left poi-g_lg-2-10">
+                        <label class="ghost_download_link_group_inputs">
+                            <span class="ghost_download_link_inputs_icon">
+                                <span class="poi-icon fa-link fas fa-fw" aria-hidden="true"></span>
+                            </span>
+                            <span class="ghost_download_link_inputs_content">
+                                <input name="post_download_container[0][link]" class="ghost_setting_content_preface_control_downloadlink " type="text" placeholder="下载链接" title="下载链接" list="customPostStoragedatalist"></span>
+                        </label>
+                    </div>
+                    <div class="col-lg-2 float-left poi-g_lg-1-10">
+                        <label class="ghost_download_link_group_inputs">
+                            <span class="ghost_download_link_inputs_icon">
+                                <span class="poi-icon fa-key fas fa-fw" aria-hidden="true"></span>
+                            </span>
+                            <span class="ghost_download_link_inputs_content">
+                                <input name="post_download_container[0][pwd]" class="ghost_setting_content_preface_control_downloadlink " type="text" placeholder="提取密码" title="提取密码" list="customPostStoragedatalist"></span>
+                        </label>
+                    </div>
+                    <div class="col-lg-2 float-left poi-g_lg-1-10">
+                        <label class="ghost_download_link_group_inputs">
+                            <span class="ghost_download_link_inputs_icon">
+                                <span class="poi-icon fa-unlock fas fa-fw" aria-hidden="true"></span>
+                            </span>
+                            <span class="ghost_download_link_inputs_content">
+                                <input name="post_download_container[0][pwd2]" class="ghost_setting_content_preface_control_downloadlink " type="text" placeholder="解压密码" title="解压密码" list="customPostStoragedatalist"></span>
+                        </label>
+                    </div>
+                    <div class="col-lg-2 float-left poi-g_lg-1-10">
+                        <label class="ghost_download_link_group_inputs">
+                            <span class="ghost_download_link_inputs_icon">
+                                <span class="poi-icon fa-unlock fas fa-fw" aria-hidden="true"></span>
+                            </span>
+                            <span class="ghost_download_link_inputs_content">
+                                <input name="post_download_container[0][credit]" class="ghost_setting_content_preface_control_downloadlink " type="text" placeholder="购买积分(0免费)" title="购买积分(0免费)" list="customPostStoragedatalist"></span>
+                        </label>
+                    </div>
+                    <div class="col-lg-1 float-left poi-g_lg-1-10">
+                        <div class="poi-btn-group ghost_download_link_storage_btns">
+                            <a class="link_add ghost_download_link_delete_btn">
+                                <span class="poi-icon fa-plus fas fa-fw" aria-hidden="true"></span>
+                            </a>
+                            <a class="ghost_download_link_delete_btn" disabled="">
+                                <span class="poi-icon fa-trash fas fa-fw" aria-hidden="true"></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <?php } ?>
             </div>
         </fieldset>
         <fieldset class="ghost_setting_content_item">
@@ -288,7 +355,7 @@ $download_urls = $PostMeta['post_download_link'] ? unserialize($PostMeta['post_d
                 </div>
             </div>
         </fieldset>
-        <a style="padding: 8px;" data-type="newpost" class="submit_post ghost_setting_content_btn_success">
+        <a style="padding: 8px;" data-postid="<?php echo $postid;?>" data-type="updatepost" class="submit_post ghost_setting_content_btn_success">
             <span class="poi-icon fa-plus fas fa-fw" aria-hidden="true">提交</span>
         </a>
     </div>

@@ -190,50 +190,55 @@ class UserCenterNotice extends Model{
 
     //增加通知的类型
     public static function AddUserNotice($UserId,$Type,$PostId = 0,$Target = 0){
-        $CreditStrategy = json_decode(SiteMeta::GetSiteMeta('CreditStrategy'));
         $dates = date('Y-m-d H:i:s');
         switch($Type){
             case 'N_SignDaily':
                 //更新用户积分
-                UserMeta::UpdateUserCredit($UserId,$CreditStrategy->N_SignDaily);
+                $credit = SiteMeta::GetSiteCreditStrategy('N_SignDaily');
+                UserMeta::UpdateUserCredit($UserId,$credit);
                 //每日签到通知
-                $sql = "insert into pink_notice (user_id,target_id,msg_type,msg_credit,msg_time,status) values({$UserId},0,'{$Type}',{$CreditStrategy->N_SignDaily},'{$dates}',0);";
+                $sql = "insert into pink_notice (user_id,target_id,msg_type,msg_credit,msg_time,status) values({$UserId},0,'{$Type}',{$credit},'{$dates}',0);";
                 break;
             case 'N_PostComment':
                 //评论文章通知
                 break;
             case 'N_Avatar':
                 //更新用户积分
-                UserMeta::UpdateUserCredit($UserId,$CreditStrategy->N_Avatar);
+                $credit = SiteMeta::GetSiteCreditStrategy('N_Avatar');
+                UserMeta::UpdateUserCredit($UserId,$credit);
                 //修改头像通知
-                $sql = "insert into pink_notice (user_id,target_id,msg_type,msg_credit,msg_time,status) values({$UserId},0,'{$Type}',{$CreditStrategy->N_Avatar},'{$dates}',0);";
+                $sql = "insert into pink_notice (user_id,target_id,msg_type,msg_credit,msg_time,status) values({$UserId},0,'{$Type}',{$credit},'{$dates}',0);";
                 break;
             case 'N_AlterEmail':
                 //更新用户积分
-                UserMeta::UpdateUserCredit($UserId,$CreditStrategy->N_AlterEmail);
+                $credit = SiteMeta::GetSiteCreditStrategy('N_AlterEmail');
+                UserMeta::UpdateUserCredit($UserId,$credit);
                 //修改邮箱通知
-                $sql = "insert into pink_notice (user_id,target_id,msg_type,msg_credit,msg_time,status) values({$UserId},0,'{$Type}',{$CreditStrategy->N_AlterEmail},'{$dates}',0);";
+                $sql = "insert into pink_notice (user_id,target_id,msg_type,msg_credit,msg_time,status) values({$UserId},0,'{$Type}',{$credit},'{$dates}',0);";
                 break;
             case 'N_Reg':
                 //更新用户积分
-                UserMeta::UpdateUserCredit($UserId,$CreditStrategy->N_Reg);
+                $credit = SiteMeta::GetSiteCreditStrategy('N_Reg');
+                UserMeta::UpdateUserCredit($UserId,$credit);
                 //注册通知
-                $sql = "insert into pink_notice (user_id,target_id,msg_type,msg_credit,msg_time,status) values({$UserId},0,'{$Type}',{$CreditStrategy->N_Reg},'{$dates}',0);";
+                $sql = "insert into pink_notice (user_id,target_id,msg_type,msg_credit,msg_time,status) values({$UserId},0,'{$Type}',{$credit},'{$dates}',0);";
                 break;
             case 'N_ForgetPwd':
                 //更新用户积分
-                UserMeta::UpdateUserCredit($UserId,$CreditStrategy->N_ForgetPwd);
+                $credit = SiteMeta::GetSiteCreditStrategy('N_ForgetPwd');
+                UserMeta::UpdateUserCredit($UserId,$credit);
                 //忘记密码通知
-                $sql = "insert into pink_notice (user_id,target_id,msg_type,msg_credit,msg_time,status) values({$UserId},0,'{$Type}',{$CreditStrategy->N_ForgetPwd},'{$dates}',0);";
+                $sql = "insert into pink_notice (user_id,target_id,msg_type,msg_credit,msg_time,status) values({$UserId},0,'{$Type}',{$credit},'{$dates}',0);";
                 break;
             case 'N_UserComment':
                 //文章被评论通知
                 break;
             case 'N_PublishPost':
                 //更新用户积分
-                UserMeta::UpdateUserCredit($UserId,$CreditStrategy->N_PublishPost);
+                $credit = SiteMeta::GetSiteCreditStrategy('N_PublishPost');
+                UserMeta::UpdateUserCredit($UserId,$credit);
                 //发布文章通知
-                $sql = "insert into pink_notice (user_id,target_id,msg_type,msg_credit,msg_time,post_id,status) values({$UserId},0,'{$Type}',{$CreditStrategy->N_PublishPost},'{$dates}','{$PostId}',0);";
+                $sql = "insert into pink_notice (user_id,target_id,msg_type,msg_credit,msg_time,post_id,status) values({$UserId},0,'{$Type}',{$credit},'{$dates}','{$PostId}',0);";
                 break;
             case 'N_Flowers':
                 //关注用户通知
@@ -243,21 +248,24 @@ class UserCenterNotice extends Model{
                 break;
             case 'N_SellPaidPost':
                 //更新用户积分
-                UserMeta::UpdateUserCredit($UserId,$CreditStrategy->N_SellPaidPost);
+                $credit = SiteMeta::GetSiteCreditStrategy('N_SellPaidPost');
+                UserMeta::UpdateUserCredit($UserId,$credit);
                 //出售付费文章通知
-                $sql = "insert into pink_notice (user_id,target_id,msg_type,msg_credit,msg_time,post_id,status) values({$UserId},{$Target},'{$Type}',{$CreditStrategy->N_SellPaidPost},'{$dates}','{$PostId}',0);";
+                $sql = "insert into pink_notice (user_id,target_id,msg_type,msg_credit,msg_time,post_id,status) values({$UserId},{$Target},'{$Type}',{$credit},'{$dates}','{$PostId}',0);";
                 break;
             case 'N_BuyPaidPost':
                 //更新用户积分
-                UserMeta::UpdateUserCredit($UserId,$CreditStrategy->N_BuyPaidPost);
+                $credit = SiteMeta::GetSiteCreditStrategy('N_BuyPaidPost');
+                UserMeta::UpdateUserCredit($UserId,$credit);
                 //购买付费文章通知
-                $sql = "insert into pink_notice (user_id,target_id,msg_type,msg_credit,msg_time,post_id,status) values({$UserId},{$Target},'{$Type}',{$CreditStrategy->N_BuyPaidPost},'{$dates}','{$PostId}',0);";
+                $sql = "insert into pink_notice (user_id,target_id,msg_type,msg_credit,msg_time,post_id,status) values({$UserId},{$Target},'{$Type}',{$credit},'{$dates}','{$PostId}',0);";
                 break;
             case 'N_AlterPwd':
                 //更新用户积分
-                UserMeta::UpdateUserCredit($UserId,$CreditStrategy->N_AlterPwd);
+                $credit = SiteMeta::GetSiteCreditStrategy('N_AlterPwd');
+                UserMeta::UpdateUserCredit($UserId,$credit);
                 //修改密码通知
-                $sql = "insert into pink_notice (user_id,target_id,msg_type,msg_credit,msg_time,status) values({$UserId},0,'{$Type}',{$CreditStrategy->N_AlterPwd},'{$dates}',0);";
+                $sql = "insert into pink_notice (user_id,target_id,msg_type,msg_credit,msg_time,status) values({$UserId},0,'{$Type}',{$credit},'{$dates}',0);";
                 break;
         }
         return self::SqlUpdate($sql);

@@ -39,8 +39,32 @@ class UserCenterAddPost extends Model{
     }
 
     //更新文章
-    public static function UpdatePost(){
+    public static function UpdatePost($PostMeta,$Link,$UserId,$Msg,$PostType='post',$PostId = 0){
+        global $config;
+        $result = new Dao($config['database']);
 
+        $NowTime = date('Y-m-d H:i:s');
+        $PostImg = $PostMeta['PostImg'];
+        $PostCat = array($PostMeta['cat']);
+        $PostCat = json_encode($PostCat);
+        $PostTag = json_encode($PostMeta['tag'], JSON_UNESCAPED_UNICODE);
+        $PostName = urlencode($PostMeta['title']);
+        $Link = serialize($Link);
+        if($PostType == 'video'){
+            //如果是视频文章类型
+            $PostMusic = '';
+            $PostVideo = $Msg;
+        }elseif($PostType == 'music'){
+            //如果是音乐文章类型
+            $PostMusic = $Msg;
+            $PostVideo = '';
+        }else{
+            //如果是音乐文章类型
+            $PostMusic = '';
+            $PostVideo = '';
+        }
+        $sql = "update pink_posts set post_date = '{$NowTime}',post_date_gmt = '{$NowTime}',post_content = '{$PostMeta['meta']}',post_title = '{$PostMeta['title']}',post_name = '{$PostName}',post_modified = '{$NowTime}',post_modified_gmt = '{$NowTime}',post_menu = '{$PostCat}',post_tag = '{$PostTag}',post_type = '{$PostType}',post_download_link = '{$Link}',post_music = '{$PostMusic}',post_video = '{$PostVideo}',post_header_img = '{$PostImg}' where ID = '{$PostId}'";
+        return $result->DaoExec($sql);
     }
 
     //上传用户头像

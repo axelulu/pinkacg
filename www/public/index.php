@@ -1,5 +1,4 @@
 <?php
-
 //增加入口标记
 define('ACCESS', true);
 

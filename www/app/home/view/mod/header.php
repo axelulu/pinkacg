@@ -188,7 +188,7 @@ foreach($menu as $menu_item) {
                                         <i class="poi-icon fas fa-cog" aria-hidden="true"></i>
                                     </div>
                                     <div class="ghost_user_menu_item_link_text">我的设置</div></a>
-                                <a href="<?php echo UserMeta::GetUserUrl('drafts');?>" title="我的草稿" class="ghost_user_menu_item_link">
+                                <a href="<?php echo UserMeta::GetUserUrl('drafts');?>" title="我的文章" class="ghost_user_menu_item_link">
                                     <div class="ghost_user_menu_item_link_icon">
                                         <i class="poi-icon fas fa-copy" aria-hidden="true"></i>
                                     </div>

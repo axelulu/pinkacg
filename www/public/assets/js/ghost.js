@@ -172,6 +172,7 @@ jQuery(function($) {
                     },
                     type: 'POST',
                     success: function(msg) {
+                        console.log(msg);
                         if(msg.code==0){
                             $.ghostalert_error(msg.message, 2000, false);
                         }else if(msg.code==1){
@@ -650,6 +651,7 @@ jQuery(function($) {
                 },
                 type: 'POST',
                 success: function(msg) {
+                    console.log(msg);
                     if (msg.code == 1) {
                         $.ghostalert_success(msg.message, 2000, false);
                     } else {
@@ -1193,7 +1195,7 @@ jQuery(function($) {
                                 <a class="ghost_comment_footer_btn ghost_tuwen" title="颜文表情" style="flex-grow: 2;">\
                                     <span class="poi-icon fa-smile fas fa-fw" aria-hidden="true"></span>\
                                 </a>\
-                                <button  type="submit" data-commentid="' + $(this).attr('data-commentid') + '" data-comment="' + ghost.comment_security_nonce + '" class="ghost_comment_' + $type + '_submit ghost_comment_footer_btn ghost_comment_footer_btn_success" title="">\
+                                <button  type="submit" data-userid="' + $(this).attr('data-userid') + '" data-commentid="' + $(this).attr('data-commentid') + '" data-comment="' + ghost.comment_security_nonce + '" class="ghost_comment_' + $type + '_submit ghost_comment_footer_btn ghost_comment_footer_btn_success" title="">\
                                     <span class="poi-icon fa-check fas fa-fw" aria-hidden="true"></span>\
                                     <span class="ghost_icon_text">我说完了</span></button>\
                             </footer>\
@@ -1220,18 +1222,23 @@ jQuery(function($) {
         function() {
             $comment = {
                 'content': $('.ghost_comment_commenter_content').val(),
-                'commentnonce': $(this).attr('data-comment'),
                 'post_id': $('.article').attr('data-id'),
             }
+            $userid = $(this).attr('data-userid');
+            console.log($userid);
+            console.log($comment);
             if ($comment['content'] == '') return false;
             $.ghostalert_loading(2000, false);$.ajax({
                 url: ghost.ajaxurl,
                 data: {
-                    action: 'submit_comments',
-                    comment: $comment
+                    c: 'User',
+                    a: 'SubmitPostComment',
+                    comment: $comment,
+                    userid: $userid,
                 },
                 type: 'POST',
                 success: function(msg) {
+                    console.log(msg);
                     if (msg.code == 1) {
                         $('.ghost_comments_bar_').removeClass('open');
                         $('.ghost_comments_box_container').removeClass('open');
@@ -1239,9 +1246,9 @@ jQuery(function($) {
                             $('.ghost_comments_bar').remove();
                         },
                         250);
-                        $.ghostalert_success(msg.msg, 2000, true);
+                        $.ghostalert_success(msg.message, 2000, true);
                     } else {
-                        $.ghostalert_error(msg.msg, 2000, false);
+                        $.ghostalert_error(msg.message, 2000, false);
                     }
                 }
             });
@@ -1571,13 +1578,16 @@ jQuery(function($) {
                 },
                 type: 'POST',
                 success: function(msg) {
+                    console.log(msg);
                     if (msg.code == 1) {
                         $.ghostalert_success(msg.message, 2000, true);
-                        window.location.replace(msg.PostUrl);
+                        setTimeout(function (){
+                            window.location.replace(msg.PostUrl);
+                        },2000);
                     } else {
                         $.ghostalert_error(msg.message, 2000, false);
                     }
-                }
+                },
             });
         })
     
@@ -2737,6 +2747,8 @@ jQuery(function($) {
          // 文章图片上传
          $(".main").on('change','#imgs_upload',function(e){
              $file = e.currentTarget.files;
+             console.log($file[0]);
+             console.log($('.ghost_setting_content_container').attr('data-userid'));
              for($i=0;$i<$file.length;$i++){
                  //结合formData实现图片预览
                  var sendData=new FormData();
@@ -2759,7 +2771,8 @@ jQuery(function($) {
                          alert(res.message);
                      }
                  }).fail(function(res) {
-                         alert(res.message);
+                     console.log(res);
+                     alert(res.message);
                  });
              }
      

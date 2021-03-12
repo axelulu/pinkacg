@@ -3,6 +3,7 @@
 namespace home\controller;
 
 use core\SendMail;
+use model\Comment;
 use model\HeadFooder;
 use model\SiteMeta;
 use model\UserCenterMsg;
@@ -257,7 +258,7 @@ class UserController{
 
         //发送验证码
         $RegCode = self::GenerateCode(6);
-        session_start();
+        @session_start();
         $_SESSION['RegCode'] = $RegCode;
         //发送邮件
         $SendMail = new SendMail();
@@ -324,7 +325,7 @@ class UserController{
             exit();
         }
 
-        session_start();
+        @session_start();
         $RegCode = $_SESSION['RegCode'];
         unset($_SESSION['RegCode']);
         if($veriCode != $RegCode){
@@ -392,7 +393,7 @@ class UserController{
             exit();
         }
 
-        session_start();
+        @session_start();
         $ForgetCode = $_SESSION['ForgetCode'];
         unset($_SESSION['ForgetCode']);
         if($veriCode != $ForgetCode){
@@ -453,7 +454,7 @@ class UserController{
 
         //发送验证码
         $ForgetCode = self::GenerateCode(6);
-        session_start();
+        @session_start();
         $_SESSION['ForgetCode'] = $ForgetCode;
         //发送邮件
         $SendMail = new SendMail();
@@ -472,7 +473,7 @@ class UserController{
 
     //修改邮箱时获取验证码
     public static function GetAlterCode(){
-        header( 'content-type: application/json; charset=utf-8' );
+        header('content-type:application/json;charset=utf-8');
         //接收数据
         $UserId  = isset($_POST['UserId']) ? trim($_POST['UserId']) : '';
         $Email  = isset($_POST['Email']) ? trim($_POST['Email']) : '';
@@ -515,17 +516,18 @@ class UserController{
 
         //发送验证码
         $AlterCode = self::GenerateCode(6);
-        session_start();
+        @session_start();
         $_SESSION['AlterCode'] = $AlterCode;
         //发送邮件
         $SendMail = new SendMail();
         $state = $SendMail->SendMsg($Email,$AlterCode,'AlterMail');
-        if($state == 1){
+        if($state === 1){
             $result['message']	= '发送成功';
             $result['code']	= 1;
             echo json_encode( $result );
             exit();
         }
+
         $result['message']	= '发送失败';
         $result['code']	= 0;
         echo json_encode( $result );
@@ -574,7 +576,7 @@ class UserController{
             exit();
         }
 
-        session_start();
+        @session_start();
         $AlterCode = $_SESSION['AlterCode'];
         unset($_SESSION['AlterCode']);
         if($Secure != $AlterCode){
@@ -724,7 +726,28 @@ class UserController{
                 exit();
             }
         }elseif($PostMeta['type'] == 'updatepost'){
+            $PostId = $_POST['postmeta']['post_id'] ?? '';
+            //判断更新的文章的类型
+            if(!empty($Video)){
+                //视频类型文章video
+                $flag = UserCenterAddPost::UpdatePost($PostMeta,$Link,$UserId,$Video,'video',$PostId);
+            }elseif(!empty($Music)){
+                //音乐文章类型music
+                $flag = UserCenterAddPost::UpdatePost($PostMeta,$Link,$UserId,$Music,'music',$PostId);
+            }else{
+                //普通文章类型
+                $flag = UserCenterAddPost::UpdatePost($PostMeta,$Link,$UserId,null,'post',$PostId);
+            }
+            if($flag){
 
+                //提交新文章通知用户
+                UserCenterNotice::AddUserNotice($UserId,'N_PublishPost',$PostId);
+                $result['PostUrl'] = PostMeta::GetPostUrl($PostId);
+                $result['message'] = '提交成功';
+                $result['code'] = 1;
+                echo json_encode($result);
+                exit();
+            }
         }
     }
 
@@ -991,6 +1014,39 @@ class UserController{
 
         $result['message']	= '购买成功';
         $result['code']	= 1;
+        echo json_encode( $result );
+        exit();
+
+    }
+
+    //提交文章评论
+    public static function SubmitPostComment(){
+        header('content-type: application/json; charset=utf-8');
+        $UserId = $_POST['userid'] ?? '';
+        $Content = $_POST['comment']['content'] ?? '';
+        $PostId = $_POST['comment']['post_id'] ?? '';
+
+        //判断用户权限
+        if(!SiteMeta::Login() || empty($UserId)){
+            $result['message']	= '未登录';
+            $result['code']	= 0;
+            echo json_encode( $result );
+            exit();
+        }
+
+        //判断用户权限
+        if(empty($UserId) || empty($Content) || empty($PostId)){
+            $result['message']	= '内容为空';
+            $result['code']	= 0;
+            echo json_encode( $result );
+            exit();
+        }
+
+        //提交文章评论
+        $CommentId = Comment::SubmitPostComment($UserId,$PostId,$Content);
+        $result['message']	= '评论成功';
+        $result['code']	= 1;
+        $result['CommentId'] = $CommentId;
         echo json_encode( $result );
         exit();
 

@@ -155,7 +155,7 @@ class IndexController{
             exit();
         }
 
-        $SiteMeta = isset($_POST['SiteMeta']) ? addslashes(json_encode($_POST['SiteMeta'])) : '';
+        $SiteMeta = isset($_POST['SiteMeta']) ? addslashes(serialize($_POST['SiteMeta'])) : '';
 
         $sql = @SiteMeta::GetSiteMeta('SiteMeta') ? "update pink_site_meta set site_value = '{$SiteMeta}' where site_key = 'SiteMeta';" : "insert into pink_site_meta (site_value,site_key) values('{$SiteMeta}','SiteMeta');";
         SiteMeta::UpdateSiteMeta($sql);
@@ -169,8 +169,8 @@ class IndexController{
     public static function UpdateSmtpMeta(){
         header( 'content-type: application/json; charset=utf-8' );
         $SmtpMeta = $_POST['SmtpMeta'] ?? '';
-        $SmtpMeta = addslashes(json_encode($SmtpMeta));
-        $sql = "update pink_site_meta set site_value = '{$SmtpMeta}' where site_key = 'smtp_meta';";
+        $SmtpMeta = addslashes(serialize($SmtpMeta));
+        $sql = "update pink_site_meta set site_value = '{$SmtpMeta}' where site_key = 'EmailMeta';";
         if(SiteMeta::UpdateSiteMeta($sql)){
             $result['message']	= '修改成功';
             $result['code']	= 1;
@@ -188,7 +188,7 @@ class IndexController{
     public static function UpdateCreditStrategy(){
         header( 'content-type: application/json; charset=utf-8' );
         $CreditStrategy = $_POST['CreditStrategy'] ?? '';
-        $CreditStrategy = addslashes(json_encode($CreditStrategy));
+        $CreditStrategy = addslashes(serialize($CreditStrategy));
         $sql = "update pink_site_meta set site_value = '{$CreditStrategy}' where site_key = 'CreditStrategy';";
         if(SiteMeta::UpdateSiteMeta($sql)){
             $result['message']	= '修改成功';
@@ -249,7 +249,7 @@ class IndexController{
         }
 
         $FooterMeta = isset($_POST['FooterMeta']) ? $_POST['FooterMeta'] : '';
-        $FooterMeta = addslashes(json_encode($FooterMeta));
+        $FooterMeta = addslashes(serialize($FooterMeta));
 
         $sql = @SiteMeta::GetSiteMeta('FooterMeta') ? "update pink_site_meta set site_value = '{$FooterMeta}' where site_key = 'FooterMeta';" : "insert into pink_site_meta (site_value,site_key) values('{$FooterMeta}','FooterMeta');";
         if(SiteMeta::UpdateSiteMeta($sql)){

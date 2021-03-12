@@ -66,7 +66,7 @@ $download_urls = $PostMeta['post_download_link'] ? unserialize($PostMeta['post_d
 <!-- 正文 -->
 <div class="main single container">
     <div class="clearfix">
-        <div data-id="78561" class="article float-left col-lg-9">
+        <div data-id="<?php echo PostId;?>" class="article float-left col-lg-9">
             <article>
                 <h1 class="ghost_single_title"><?php echo $PostMeta['post_title'];?></h1>
                 <header class="ghost_single_header"> 
@@ -102,7 +102,7 @@ $download_urls = $PostMeta['post_download_link'] ? unserialize($PostMeta['post_d
 									</a>
                     </span>
                     <span class="single_header_item " title="编辑文章">
-                        <a href="https://pinkacg.com/me/edit_post?post_id=78561" target="_blank"><i class="poi-icon fas fa-paint-brush fa-fw" aria-hidden="true"></i> 
+                        <a href="<?php echo URL . '?c=User&m=editpost&id=' . PostId;?>" target="_blank"><i class="poi-icon fas fa-paint-brush fa-fw" aria-hidden="true"></i>
                             <span class="">编辑文章</span></a>
                     </span>
                     <span class="single_header_item delete_my_post" title="删除文章">
@@ -351,7 +351,7 @@ $download_urls = $PostMeta['post_download_link'] ? unserialize($PostMeta['post_d
             <!-- 评论 -->
             <aside>
                 <div class="ghost_comment">
-                    <div class="<?php Menu::IsLogin('join_comments')?> ghost_comment_faker">
+                    <div data-userid="<?php echo $LOGINUSER['ID'];?>" class="<?php Menu::IsLogin('join_comments')?> ghost_comment_faker">
                         <img class="ghost_comment_faker_avatar" src="<?php echo SiteMeta::GetSiteMetaItem('site_default_avatar');?>" alt="avatar" width="18" height="18">
                         <span class="ghost_comment_text">点击参与讨论！</span></div>
                     <h2 class="ghost_comment_title">

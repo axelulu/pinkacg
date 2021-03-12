@@ -1,20 +1,5 @@
 <?php
-use model\SiteMeta;
-if(@SiteMeta::GetSiteMeta('smtp_meta')){
-    $smtp_meta = json_decode(SiteMeta::GetSiteMeta('smtp_meta'));
-    $smtp_host = $smtp_meta->smtp_host;
-    $smtp_username = $smtp_meta->smtp_username;
-    $smtp_pass = $smtp_meta->smtp_pass;
-    $smtp_secure = $smtp_meta->smtp_secure;
-    $smtp_port = $smtp_meta->smtp_port;
-}else{
-    $smtp_host = '';
-    $smtp_username = '';
-    $smtp_pass = '';
-    $smtp_secure = '';
-    $smtp_port = '';
-}
-?>
+use model\SiteMeta;?>
 <div class="layui-body" style="padding-left: 30px;">
     <!-- 内容主体区域 -->
     <div style="padding: 15px;">
@@ -26,31 +11,31 @@ if(@SiteMeta::GetSiteMeta('smtp_meta')){
         <div class="layui-form-item">
             <label class="layui-form-label">服务器</label>
             <div class="layui-input-block">
-                <input type="text" name="smtp_host" lay-verify="title" autocomplete="off" placeholder="请输入您的邮箱服务器" value="<?php echo $smtp_host;?>" class="layui-input">
+                <input type="text" name="smtp_host" lay-verify="title" autocomplete="off" placeholder="请输入您的邮箱服务器" value="<?php echo SiteMeta::GetSiteEmail('smtp_host');?>" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">用户名</label>
             <div class="layui-input-block">
-                <input type="text" name="smtp_username" lay-verify="title" autocomplete="off" placeholder="请输入您的邮箱用户名" value="<?php echo $smtp_username;?>" class="layui-input">
+                <input type="text" name="smtp_username" lay-verify="title" autocomplete="off" placeholder="请输入您的邮箱用户名" value="<?php echo SiteMeta::GetSiteEmail('smtp_username');?>" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">密码</label>
             <div class="layui-input-block">
-                <input type="text" name="smtp_pass" lay-verify="title" autocomplete="off" placeholder="请输入您的邮箱密码" value="<?php echo $smtp_pass;?>" class="layui-input">
+                <input type="text" name="smtp_pass" lay-verify="title" autocomplete="off" placeholder="请输入您的邮箱密码" value="<?php echo SiteMeta::GetSiteEmail('smtp_pass');?>" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">认证协议</label>
             <div class="layui-input-block">
-                <input type="text" name="smtp_secure" lay-verify="title" autocomplete="off" placeholder="请输入您的邮箱验证协议" value="<?php echo $smtp_secure;?>" class="layui-input">
+                <input type="text" name="smtp_secure" lay-verify="title" autocomplete="off" placeholder="请输入您的邮箱验证协议" value="<?php echo SiteMeta::GetSiteEmail('smtp_secure');?>" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">SMTP端口</label>
             <div class="layui-input-block">
-                <input type="text" name="smtp_port" lay-verify="title" autocomplete="off" placeholder="请输入您的邮箱端口" value="<?php echo $smtp_port;?>" class="layui-input">
+                <input type="text" name="smtp_port" lay-verify="title" autocomplete="off" placeholder="请输入您的邮箱端口" value="<?php echo SiteMeta::GetSiteEmail('smtp_port');?>" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">

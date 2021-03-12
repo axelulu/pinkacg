@@ -12,7 +12,7 @@
                                 <i class="fa-paint-brush fas fa-fw ghost_sidebar_item_sub_item_link_icon" aria-hidden="true"></i> <span class="ghost_sidebar_item_sub_item_link_text">我的设置</span>
                             </a>
                         </li><li class="ghost_sidebar_item_sub_item">
-                            <a class="ghost_sidebar_item_sub_item_link" data-type="drafts" title="我的草稿">
+                            <a class="ghost_sidebar_item_sub_item_link" data-type="drafts" title="我的文章">
                                 <i class="fa-copy fas fa-fw ghost_sidebar_item_sub_item_link_icon" aria-hidden="true"></i> <span class="ghost_sidebar_item_sub_item_link_text">我的草稿</span>
                             </a>
                         </li><li class="ghost_sidebar_item_sub_item">
